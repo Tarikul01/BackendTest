@@ -1,4 +1,6 @@
+import { Types } from "mongoose";
 
 export interface IText {
-    text: string
+    text: string,
+    textCreator:Types.ObjectId;
 }

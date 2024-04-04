@@ -3,7 +3,9 @@ import { IText } from "./text.interface";
 
 const textSchema = new Schema<IText>(
   {
-    text:{type:String}
+    text:{type:String},
+    
+    textCreator: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   {
     timestamps: true,
