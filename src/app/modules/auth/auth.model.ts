@@ -9,29 +9,6 @@ const UserSchema = new Schema<IUser, Record<string, unknown>, IUserMethods>(
       type: String,
       required: true,
     },
-    displayName: {
-      type: String,
-    },
-    profileImage: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    country: {
-      type: String,
-    },
-    status:{
-      type:String,
-      default:"active"
-    },
-    authType: {
-      type: String,
-      default: "email",
-    },
-    authId: {
-      type: String,
-    },
     email: {
       type: String,
       required: true,
@@ -44,15 +21,6 @@ const UserSchema = new Schema<IUser, Record<string, unknown>, IUserMethods>(
       type: String,
       required: false,
       minLength: 4,
-    },
-    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    emailIsVerified: {
-      type: Boolean,
-      default: false,
-    },
-    verificationCode: {
-      type: Number,
-      default: 0,
     },
   },
   {
@@ -111,12 +79,6 @@ UserSchema.methods.isPasswordMatched = async function (
   return bcrypt.compare(givenPassword, savedPassword);
 };
 
-// UserSchema.pre("save", async function (next) {
-//   if (this.password) {
-//     this.password = await bcrypt.hash(this.password, 10);
-//   }
-//   next();
-// });
 
 const User = model<IUser, IUserModel>("User", UserSchema);
 

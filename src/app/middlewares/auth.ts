@@ -32,6 +32,12 @@ export const auth =
 
       // console.log("verified-user~", verifiedUser);
       req.user = verifiedUser;
+      if (
+        requiredRoles.length &&
+        !requiredRoles.some((value) => verifiedUser?.authority?.includes(value))
+      ) {
+        throw new AppError(httpStatus.FORBIDDEN, "Forbidden");
+      }
       next();
     } catch (error) {
       next(error);

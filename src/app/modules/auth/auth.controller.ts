@@ -4,12 +4,10 @@ import { Secret } from "jsonwebtoken";
 import httpStatus from "http-status";
 
 import catchAsync from "../../../shared/catchAsync";
-import User from "./auth.model";
 import { AuthServices } from "./auth.service";
 import AppError from "../../../error/AppError";
 import { jwtHelpers } from "../../../utils/auth";
 import config from "../../../config";
-import { IUser } from "./auth.interface";
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
   const { email, userName, password } = req.body;
@@ -30,23 +28,16 @@ export const createUser = catchAsync(async (req: Request, res: Response) => {
     await savedUser.save();
 
     return res.json({
-      message: "Email is sent",
+      message: "Users created successfully !",
       success: true,
       userId: savedUser._id,
       status: httpStatus.CREATED,
     });
   
-  // else {
-  //   return res.json({
-  //     message: "Something went wrong",
-  //     success: false,
-  //     status: httpStatus.BAD_REQUEST,
-  //   });
-  // }
 });
 
 export const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const { userName, password, authType } = req.body;
+  const { userName, password } = req.body;
 
 
 
@@ -54,7 +45,6 @@ export const loginUser = catchAsync(async (req: Request, res: Response) => {
     throw new AppError(400, "Something went wrong");
   }
 
-  // const isExistUser = await AuthServices.findUserByUserName(userName);
   const isExistUser = await AuthServices.findUserByUserNameOrEmail(userName);
   console.log("isExistUser: ", isExistUser);
   if (!isExistUser) {
