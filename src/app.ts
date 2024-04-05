@@ -6,6 +6,10 @@ import { errorHandler } from "./app/middlewares/globalErrorHandler";
 import AppError from "./error/AppError";
 import { authRouter } from "./app/modules/auth/auth.route";
 import { textRouter } from "./app/modules/TextAnalyer/text.route";
+import rateLimit from "express-rate-limit"
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp"
 
 const app = express();
 
@@ -14,8 +18,17 @@ app.use(cors());
 
 
 
-
-
+//security middleware implement
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(mongoSanitize());
+app.use(hpp());
+//Request rate-limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter);
 app.use(morgan("dev"));
 app.use("/api/v1/users", authRouter);
 
